@@ -26,12 +26,13 @@ app.set("view engine", "ejs");
 app.use(express.static(path.join(__dirname + '/public')));
 app.use('/uploads', express.static(path.join(__dirname + '/uploads')));
 
+app.use(express.json());
 app.use(expressSession({ secret: "key", resave: false, saveUninitialized: false, }));
 app.use(passport.initialize());
 app.use(passport.session());
 
 app.use(user_router)
-// app.use(passportAuth)
+app.use(passportAuth)
 app.use(admin_router);
 app.use('/product', p_router);
 app.use('/category', cat_router)

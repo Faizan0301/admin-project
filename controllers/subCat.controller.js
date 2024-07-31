@@ -22,8 +22,8 @@ const addSubCat = async (req, res) => {
 const viewSubCat = async (req, res) => {
     try {
         let subCat = await subCatModel.find({}).populate('extCatId');
-        // return res.render('pages/viewSubCategory', { subCat })
-        return res.send(subCat)
+        return res.render('pages/viewSubCategory', { subCat })
+        // return res.send(subCat)
     } catch (error) {
         res.send(error.message)
     }

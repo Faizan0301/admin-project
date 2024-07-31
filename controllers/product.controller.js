@@ -25,12 +25,21 @@ const productPage = async (req, res) => {
 }
 const viewProduct = async (req, res) => {
     try {
-        let products = await productModel.find({})
+        let products = await productModel.find({}).populate({
+            path: 'catId',
+            name:String
+        }).populate({
+            path: 'subCatId',
+            name:String
+        }).populate({
+            path: 'extCatId',
+            name:String
+        });
 
-        // return res.render('pages/viewProduct',{
-        //     products
-        // });
-        return res.json(products)
+        return res.render('pages/viewProduct',{
+            products
+        });
+        // return res.json(products)
     } catch (error) {
         res.send(error.message)
     }

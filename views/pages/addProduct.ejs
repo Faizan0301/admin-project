@@ -123,19 +123,18 @@
               <div class="mb-3">
                 <label for="subCategory" class="form-label">Sub-Category</label>
                 <select class="form-select" id="subCategory" name="subCatId">
-                  <option value="">Select Sub-Category</option>
+                  <option value="" disabled selected>Select Sub-Category</option>
                     
                 </select>
               </div>
               <div class="mb-3">
                 <label for="extraCategory" class="form-label">Extra Category</label>
                 <select class="form-select" id="extraCategory" name="extCatId">
-                  <option value="">Select Extra Category</option>
+                  <option value="" disabled selected>Select Extra Category</option>
                 </select>
               </div>
               <button type="submit" class="btn btn-primary">Add Product</button>
-            </form>
-
+            </form>    
           </div>
           <!-- ============================================================== -->
           <!-- End Container fluid  -->
@@ -158,7 +157,40 @@
   <!-- ============================================================== -->
   <!-- End Wrapper -->
   <!-- ============================================================== -->
-  
+  <script>
+    document.getElementById('category').addEventListener('change',()=>{
+      get()
+    })
+    let get = async () => {
+            let req = await fetch('/category/data');
+            let res = await req.json();
+            subCat(res);
+        }
+    let subCat=(data)=>{
+      let id =document.getElementById('category').value;
+      data.map((item)=>{
+        if(item._id == id){
+          document.getElementById('subCategory').innerHTML = '<option value="">Select Sub-Category</option>';
+          item.subCatId.map((subItem)=>{
+            document.getElementById('subCategory').innerHTML += `<option value="${subItem._id}">${subItem.name}</option>`;
+          })
+          document.getElementById('subCategory').addEventListener('change',()=>{
+            let id=document.getElementById('subCategory').value;
+            item.subCatId.map((subItem)=>{
+              if(subItem._id == id){
+                document.getElementById('extraCategory').innerHTML = '<option value="">Select Ext-Category</option>';
+                subItem.extCatId.map((extItem)=>{
+                  document.getElementById('extraCategory').innerHTML += `<option value="${extItem._id}">${extItem.name}</option>`;
+                })
+              }
+            })
+            getSubCat(id)
+          })
+        }
+        
+      })
+    }
+  </script>
   <!-- ============================================================== -->
   <!-- All Jquery -->
   <!-- ============================================================== -->
