@@ -19,8 +19,7 @@ const productPage = async (req, res) => {
             path: 'extCatId'
         }
     });
-    // let subCats = await subCatModel.find({});
-    // let extCats = await extCatModel.find({});
+    
     return res.render('pages/addProduct', { cats })
 }
 const viewProduct = async (req, res) => {
