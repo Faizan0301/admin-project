@@ -106,6 +106,22 @@
         <!-- ============================================================== -->
         <div class="container-fluid">
 
+          <% if(info=='add'){ %>
+            <div class="alert alert-success">
+              <p>Product Add..</p>
+          </div>
+          <% } %>
+          <% if(info=='delete'){ %>
+            <div class="alert alert-danger">
+              <p>Product Delete..</p>
+          </div>
+          <% } %>
+          <% if(info=='update'){ %>
+            <div class="alert alert-success">
+              <p>Product Update..</p>
+          </div>
+          <% } %>
+
         <% if (products.length > 0) { %>
   <table class="table table-striped">
     <thead>
@@ -126,13 +142,13 @@
         <td><%= product.title %></td>
         <td><%= product.description %></td>
         <td><%= product.price %></td>
-        <td><img src="../../<%= product.image %>" alt="<%= product.title %>" width="70" height="70" class="img-thumbnail"></td>
+        <td><img src="../../<%= product.image %>" alt="<%= product.title %>" width="70"  class=""></td>
         <td><%= product.catId.name %></td>
         <td><%= product.subCatId.name %></td>
         <td><%= product.extCatId.name %></td>
         <td>
-          <a href="" class="text-info"><i class="mdi mdi-pen fs-2"></i></a>
-          <a href="" class="text-danger"><i class="mdi mdi-delete fs-2"></i></a>
+          <a href="/product/edit<%= product._id %>" class="text-info me-2"><i class="mdi mdi-pen fs-2"></i></a>
+          <a href="#" class="text-danger" id="delete" productId="<%= product._id %>"><i class="mdi mdi-delete fs-2"></i></a>
 
         </td>
       </tr>
@@ -167,6 +183,21 @@
     <!-- ============================================================== -->
     <!-- End Wrapper -->
     <!-- ============================================================== -->
+    <script>
+      const deleteLinks = document.querySelectorAll('#delete');
+      deleteLinks.forEach(link => {
+        link.addEventListener('click', (event) => {
+          event.preventDefault();
+          const productId = link.getAttribute('productId');
+          fetch(`/product/delete/${productId}`, {
+            method: 'DELETE'
+          }).then(()=>{
+            window.location.reload();
+          })
+        });
+      });
+  
+    </script>
     <!-- ============================================================== -->
     <!-- All Jquery -->
     <!-- ============================================================== -->

@@ -69,7 +69,7 @@
           <div class="page-breadcrumb">
             <div class="row">
               <div class="col-12 d-flex no-block align-items-center">
-                <h4 class="page-title">Category</h4>
+                <h4 class="page-title">Dashboard</h4>
                 <div class="ms-auto text-end">
                   <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
@@ -90,30 +90,56 @@
           <!-- Container fluid  -->
           <!-- ============================================================== -->
           <div class="container-fluid">
-
-            <% if (extCat.length> 0) { %>
-              <table class="table table-striped">
-                <thead>
-                  <tr>
-                    <th scope="col">Name</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <% for (const cat of extCat) { %>
-                    <tr>
-                      <td>
-                        <%= cat.name %>
-                      </td>
-                    </tr>
+            <h1>Add Product</h1>
+            <form action="/product" method="POST" enctype="multipart/form-data">
+              <div class="mb-3">
+                <label for="title" class="form-label">Title</label>
+                <input type="text" class="form-control" id="title" value="<%= product.title %>" name="title" required>
+                <input type="hidden" value="<%= product._id %>" name="id">
+              </div>
+              <div class="mb-3">
+                <label for="description" class="form-label">Description</label>
+                <textarea class="form-control" name="description" rows="3" required><%= product.description %></textarea>
+              </div>
+              <div class="mb-3">
+                <label for="price" class="form-label">Price</label>
+                <input type="number" step="0.01" class="form-control" value="<%= product.price %>" name="price" required>
+              </div>
+              <div class="mb-3">
+                <label for="image" class="form-label">Image</label>
+                <input type="file" class="form-control" id="image" name="image" >
+              </div>
+              <div class="mb-3">
+                <label for="category" class="form-label">Category</label>
+                <select class="form-select" id="category" name="catId">
+                  <option value="" disabled >Select Category</option>
+                  <% for(const category of cats){ %>
+                    <option value="<%= category._id %>" <% if(category._id==product.catId.id){ %> selected <% } %>>
+                      <%= category.name %>
+                    </option>
                     <% } %>
-                </tbody>
-              </table>
-              <% } else { %>
-                <div class="alert alert-secondary" role="alert">
-                  No ext-category found.
-                </div>
-                <% } %>
-
+                </select>
+              </div>
+              <div class="mb-3">
+                <label for="subCategory" class="form-label">Sub-Category</label>
+                <select class="form-select" id="subCategory" name="subCatId">
+                  <option value="" disabled selected>Select Sub-Category</option>
+                  <option value="<%= product.subCatId.id %>" selected >
+                    <%= product.subCatId.name %>
+                  </option>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label for="extraCategory" class="form-label">Extra Category</label>
+                <select class="form-select" id="extraCategory" name="extCatId">
+                  <option value="" disabled selected>Select Extra Category</option>
+                  <option value="<%= product.extCatId.id %>" selected >
+                    <%= product.extCatId.name %>
+                  </option>
+                </select>
+              </div>
+              <button type="submit" class="btn btn-primary">Add Product</button>
+            </form>    
           </div>
           <!-- ============================================================== -->
           <!-- End Container fluid  -->
@@ -136,7 +162,41 @@
   <!-- ============================================================== -->
   <!-- End Wrapper -->
   <!-- ============================================================== -->
-  
+  <script>
+    
+    document.getElementById('category').addEventListener('change',()=>{
+      get()
+    })
+    let get = async () => {
+            let req = await fetch('/category/data');
+            let res = await req.json();
+            subCat(res);
+        }
+        // get()
+    let subCat=(data)=>{
+      let id =document.getElementById('category').value;
+      data.map((item)=>{
+        if(item._id == id){
+          document.getElementById('subCategory').innerHTML = '<option value="">Select Sub-Category</option>';
+          item.subCatId.map((subItem)=>{
+            document.getElementById('subCategory').innerHTML += `<option value="${subItem._id}">${subItem.name}</option>`;
+          })
+          document.getElementById('subCategory').addEventListener('change',()=>{
+            let id=document.getElementById('subCategory').value;
+            item.subCatId.map((subItem)=>{
+              if(subItem._id == id){
+                document.getElementById('extraCategory').innerHTML = '<option value="">Select Ext-Category</option>';
+                subItem.extCatId.map((extItem)=>{
+                  document.getElementById('extraCategory').innerHTML += `<option value="${extItem._id}">${extItem.name}</option>`;
+                })
+              }
+            })
+          })
+        }
+        
+      })
+    }
+  </script>
   <!-- ============================================================== -->
   <!-- All Jquery -->
   <!-- ============================================================== -->
@@ -162,6 +222,7 @@
   <script src="../assets/libs/flot/jquery.flot.crosshair.js"></script>
   <script src="../assets/libs/flot.tooltip/js/jquery.flot.tooltip.min.js"></script>
   <script src="../dist/js/pages/chart/chart-page-init.js"></script>
+
 </body>
 
 </html>

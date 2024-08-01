@@ -13,6 +13,7 @@ const user_router = require('./router/user.router');
 const passportAuth = require('./middlewares/passport.middleware');
 const subCat_router = require('./router/subCat.router');
 const extCat_router = require('./router/extCat.router');
+const flash=require('connect-flash');
 
 localAuth(Passport);
 
@@ -30,9 +31,10 @@ app.use(express.json());
 app.use(expressSession({ secret: "key", resave: false, saveUninitialized: false, }));
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(flash());
 
 app.use(user_router)
-app.use(passportAuth)
+// app.use(passportAuth)
 app.use(admin_router);
 app.use('/product', p_router);
 app.use('/category', cat_router)
