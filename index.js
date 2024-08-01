@@ -34,7 +34,7 @@ app.use(passport.session());
 app.use(flash());
 
 app.use(user_router)
-// app.use(passportAuth)
+app.use(passportAuth)
 app.use(admin_router);
 app.use('/product', p_router);
 app.use('/category', cat_router)

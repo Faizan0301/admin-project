@@ -20,5 +20,8 @@ const logout=(req,res)=>{
         return res.redirect('/')
     })
 }
+const forgetPage=async(req,res)=>{
+    return res.render('pages/forgetPage')
+}
 
-module.exports={loginpage,signupPage,signup,logout}
+module.exports={loginpage,signupPage,signup,logout,forgetPage}
