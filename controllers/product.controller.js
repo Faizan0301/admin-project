@@ -13,8 +13,8 @@ const addProduct = async (req, res) => {
                 fs.unlinkSync(oldImg)
                 req.flash('info', 'update')
                 return res.redirect('/product/view')
-            } catch (err) {
-                console.log(err);
+            } catch (error) {
+                return res.send(error.message)
             }
 
         } else {
@@ -22,8 +22,8 @@ const addProduct = async (req, res) => {
                 await productModel.findByIdAndUpdate(id, {title,description,price,image,catId,subCatId,extCatId})
                 req.flash('info', 'update')
                 return res.redirect('/product/view')
-            } catch (err) {
-                console.log(err);
+            } catch (error) {
+                return res.send(error.message)
             }
         }
     }else{
@@ -84,7 +84,7 @@ const editPage = async (req, res) => {
         let cats = await catModel.find({});
         return res.render('pages/editPage', { product,cats, info: req.flash('info') })
     } catch (error) {
-
+        res.send(error.message)
     }
 }
 const prodectDelete = async (req, res) => {

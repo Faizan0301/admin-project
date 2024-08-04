@@ -1,7 +1,7 @@
 const { Router } = require("express");
 
 const passport = require("passport");
-const { loginpage, signupPage, logout, signup, forgetPage } = require("../controllers/user.controller");
+const { loginpage, signupPage, logout, signup, forgetPage, forgetPass } = require("../controllers/user.controller");
 
 const user_router = Router()
 
@@ -14,5 +14,5 @@ user_router.get('/signup', signupPage)
 user_router.post('/signup', signup)
 user_router.get('/logout', logout)
 user_router.post('/sendOtp',forgetPage)
-
+user_router.post('/forgetPass',forgetPass)
 module.exports = user_router
